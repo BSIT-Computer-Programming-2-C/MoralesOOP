@@ -16,10 +16,10 @@ COORD CursorPosition;
 int enemyY[3];
 int enemyX[3];
 int enemyFlag[3];
-char car[4][4] = { ' ','±','±',' ', 
-					'±','±','±','±', 
+char car[4][4] = { ' ','*','*',' ', 
+					'-','*','*','-', 
 					' ','±','±',' ',
-					'±','±','±','±' }; 
+					'±','*','*','±' }; 
 
 int carPosX = WIN_WIDTH / 2;  // X position of the car
 int carPosY = 22;  // Y position of the car (static starting position)
@@ -109,9 +109,9 @@ int collision(){
 void gameover(){
 	system("cls");
 	cout<<endl;
-	cout<<"\t\t--------------------------"<<endl;
-	cout<<"\t\t-------- Game Over -------"<<endl;
-	cout<<"\t\t--------------------------"<<endl<<endl;
+	cout<<"\t\t±±±±±±±±±±±±±±±±±±±±±±±±±±"<<endl;
+	cout<<"\t\t±±±±±±±± Game Over ±±±±±±±"<<endl;
+	cout<<"\t\t±±±±±±±±±±±±±±±±±±±±±±±±±±"<<endl<<endl;
 	cout<<"\t\tPress any key to go back to menu.";
 	getch();
 }
@@ -136,13 +136,13 @@ void instructions(){
 
 // Function to change text color based on the percentage of loading
 void setColor(int percentage) {
-    if (percentage <= 25) {
+    if (percentage <= 20) {
         SetConsoleTextAttribute(console, FOREGROUND_RED);  // Red
-    } else if (percentage <= 35) {
+    } else if (percentage <= 40) {
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);  // Orange (Red + Green)
     } else if (percentage <= 60) {
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);  // Yellow (Red + Green)
-    } else if (percentage <= 85) {
+    } else if (percentage <= 80) {
         SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);  // Yellow-Green
     } else {
         SetConsoleTextAttribute(console, FOREGROUND_GREEN);  // Green
@@ -167,11 +167,11 @@ void loadingScreen() {
         setColor(progress);
 
         // Draw the progress bar segment
-        gotoxy(barStartX + i, barStartY + 1);
+        gotoxy(barStartX + i, barStartY + 2);
         cout << "±";
 
         // Display percentage
-        gotoxy(0, 2);
+        gotoxy(10, 5);
         SetConsoleTextAttribute(console, 7); // Reset text color
         cout << "Loading: " << progress << "%" << flush;
         Sleep(50);  // Delay to simulate loading time
@@ -243,7 +243,7 @@ void play(){
 			gameover();
 			return;
 		}
-		Sleep(50);
+		Sleep(75);
 		eraseCar();
 		eraseEnemy(0);
 		eraseEnemy(1); 
@@ -280,13 +280,13 @@ int main(){
 	
 	do{
 		system("cls");
-		gotoxy(10,5); cout << " -------------------------- "; 
+		gotoxy(10,5); cout << " ±±±±±±±±±±±±±±±±±±±±±±±±±± "; 
 		gotoxy(10,6); cout << " |        Car Game        | "; 
-		gotoxy(10,7); cout << " --------------------------";
-		gotoxy(10,9); cout << "1. Start Game";
-		gotoxy(10,10); cout << "2. Instructions";	 
-		gotoxy(10,11); cout << "3. Quit";
-		gotoxy(10,13); cout << "Select option: ";
+		gotoxy(10,7); cout << " ±±±±±±±±±±±±±±±±±±±±±±±±±±";
+		gotoxy(11,9); cout << "1. Start Game";
+		gotoxy(11,10); cout << "2. Instructions";	 
+		gotoxy(11,11); cout << "3. Quit";
+		gotoxy(11,13); cout << "Select option: ";
 		char op = getche();
 		
 		if(op == '1') play();
