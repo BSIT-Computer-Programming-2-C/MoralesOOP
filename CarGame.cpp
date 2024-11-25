@@ -134,6 +134,55 @@ void instructions(){
 	getch();
 }
 
+// Function to change text color based on the percentage of loading
+void setColor(int percentage) {
+    if (percentage <= 25) {
+        SetConsoleTextAttribute(console, FOREGROUND_RED);  // Red
+    } else if (percentage <= 35) {
+        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);  // Orange (Red + Green)
+    } else if (percentage <= 60) {
+        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);  // Yellow (Red + Green)
+    } else if (percentage <= 85) {
+        SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);  // Yellow-Green
+    } else {
+        SetConsoleTextAttribute(console, FOREGROUND_GREEN);  // Green
+    }
+}
+
+void loadingScreen() {
+    system("cls");
+    int progress = 0;
+    int loadingBarWidth = 50; // Width of the progress bar
+    int barStartX = 10, barStartY = 5;
+
+    // Draw the box around the loading bar
+    SetConsoleTextAttribute(console, 7);  // Set to default color
+    
+    
+    // Loop to simulate loading
+    for (int i = 0; i < loadingBarWidth; i++) {
+        progress = (i + 1) * 2; // Calculate percentage (0% to 100%)
+
+        // Set color based on progress
+        setColor(progress);
+
+        // Draw the progress bar segment
+        gotoxy(barStartX + i, barStartY + 1);
+        cout << "±";
+
+        // Display percentage
+        gotoxy(0, 2);
+        SetConsoleTextAttribute(console, 7); // Reset text color
+        cout << "Loading: " << progress << "%" << flush;
+        Sleep(50);  // Delay to simulate loading time
+    }
+    
+    // After loading, move cursor down and reset color
+    cout << "]" << endl;
+    SetConsoleTextAttribute(console, 7); // Reset text color to normal
+    Sleep(500); // Wait before proceeding to the game
+}
+
 void play(){
 	carPosX = -1 + WIN_WIDTH / 2;
 	carPosY = 22;  // reset car's vertical position
@@ -225,6 +274,9 @@ void play(){
 int main(){
 	setcursor(0, 0); 
 	srand((unsigned)time(NULL)); 
+	
+	// Show the loading screen before the menu
+	loadingScreen();
 	
 	do{
 		system("cls");
