@@ -3,6 +3,7 @@
 #include<dos.h> 
 #include <windows.h>
 #include <time.h>
+#include <graphics.h>
 
 #define SCREEN_WIDTH 90
 #define SCREEN_HEIGHT 26
@@ -58,12 +59,14 @@ void genEnemy(int ind){
 }
 
 void drawEnemy(int ind){
+	SetConsoleTextAttribute(console, FOREGROUND_RED); 
 	if(enemyFlag[ind] == true){
 		gotoxy(enemyX[ind], enemyY[ind]);   cout<<"****";  
 		gotoxy(enemyX[ind], enemyY[ind] + 1); cout<<" ** "; 
 		gotoxy(enemyX[ind], enemyY[ind] + 2); cout<<"****"; 
 		gotoxy(enemyX[ind], enemyY[ind] + 3); cout<<" ** ";  
 	} 
+	 SetConsoleTextAttribute(console, 7);
 }
 
 void eraseEnemy(int ind){
@@ -82,11 +85,13 @@ void resetEnemy(int ind){
 }
 
 void drawCar(){
-	for(int i = 0; i < 4; i++){
-		for(int j = 0; j < 4; j++){
-			gotoxy(j + carPosX, i + carPosY); cout << car[i][j];
-		}
-	}
+    SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_RED); 
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 4; j++){
+            gotoxy(j + carPosX, i + carPosY); cout << car[i][j];
+        }
+    }
+     SetConsoleTextAttribute(console, 7);
 }
 
 void eraseCar(){
@@ -134,53 +139,44 @@ void instructions(){
 	getch();
 }
 
-// Function to change text color based on the percentage of loading
+
 void setColor(int percentage) {
     if (percentage <= 20) {
-        SetConsoleTextAttribute(console, FOREGROUND_RED);  // Red
+        SetConsoleTextAttribute(console, FOREGROUND_RED);  
     } else if (percentage <= 40) {
-        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);  // Orange (Red + Green)
+        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN); 
     } else if (percentage <= 60) {
-        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);  // Yellow (Red + Green)
+        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);  
     } else if (percentage <= 80) {
-        SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);  // Yellow-Green
+        SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);  
     } else {
-        SetConsoleTextAttribute(console, FOREGROUND_GREEN);  // Green
+        SetConsoleTextAttribute(console, FOREGROUND_GREEN);  
     }
 }
 
 void loadingScreen() {
     system("cls");
     int progress = 0;
-    int loadingBarWidth = 50; // Width of the progress bar
+    int loadingBarWidth = 50; 
     int barStartX = 10, barStartY = 5;
-
-    // Draw the box around the loading bar
-    SetConsoleTextAttribute(console, 7);  // Set to default color
-    
-    
-    // Loop to simulate loading
+   
+    SetConsoleTextAttribute(console, 7); 
+      
     for (int i = 0; i < loadingBarWidth; i++) {
-        progress = (i + 1) * 2; // Calculate percentage (0% to 100%)
-
-        // Set color based on progress
-        setColor(progress);
-
-        // Draw the progress bar segment
+        progress = (i + 1) * 2; 
+     
+        setColor(progress);       
         gotoxy(barStartX + i, barStartY + 2);
-        cout << "±";
-
-        // Display percentage
+        cout << "±"; 
         gotoxy(10, 5);
-        SetConsoleTextAttribute(console, 7); // Reset text color
+        SetConsoleTextAttribute(console, 7); 
         cout << "Loading: " << progress << "%" << flush;
-        Sleep(50);  // Delay to simulate loading time
+        Sleep(50); 
     }
-    
-    // After loading, move cursor down and reset color
+       
     cout << "]" << endl;
-    SetConsoleTextAttribute(console, 7); // Reset text color to normal
-    Sleep(500); // Wait before proceeding to the game
+    SetConsoleTextAttribute(console, 7);
+    Sleep(500); 
 }
 
 void play(){
@@ -279,6 +275,7 @@ int main(){
 	loadingScreen();
 	
 	do{
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE); 
 		system("cls");
 		gotoxy(10,5); cout << " ±±±±±±±±±±±±±±±±±±±±±±±±±± "; 
 		gotoxy(10,6); cout << " |        Car Game        | "; 
@@ -289,9 +286,13 @@ int main(){
 		gotoxy(11,13); cout << "Select option: ";
 		char op = getche();
 		
+		 SetConsoleTextAttribute(console, 7);
+		
 		if(op == '1') play();
 		else if(op == '2') instructions();
 		else if(op == '3') exit(0);
+	
+	
 		
 	}while(1);
 	
