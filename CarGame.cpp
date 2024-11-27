@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <time.h>
 #include <graphics.h>
+#include <unistd.h>
 
 #define SCREEN_WIDTH 90
 #define SCREEN_HEIGHT 26
@@ -22,8 +23,8 @@ char car[4][4] = { ' ','*','*',' ',
 					' ','±','±',' ',
 					'±','*','*','±' }; 
 
-int carPosX = WIN_WIDTH / 2;  // X position of the car
-int carPosY = 22;  // Y position of the car (static starting position)
+int carPosX = WIN_WIDTH / 2;  
+int carPosY = 22; 
 int score = 0;
 
 void gotoxy(int x, int y){
@@ -122,7 +123,22 @@ void gameover(){
 }
 
 void updateScore(){
+	
+	if (score <= 10) {
+		SetConsoleTextAttribute(console, FOREGROUND_RED);  
+	} else if (score <= 20){
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE); 
+	}else if (score <= 30){
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);
+	}else {
+		SetConsoleTextAttribute(console, FOREGROUND_GREEN);
+	
+	sleep(2);	
+	}
+	
 	gotoxy(WIN_WIDTH + 7, 5); cout << "Score: " << score << endl;
+	
+	 SetConsoleTextAttribute(console, 7);
 }
 
 void instructions(){
