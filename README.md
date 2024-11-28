@@ -6,3 +6,4 @@ Update part 1: adding Loading screen
 Update part 2: adding color changes to menu and the cars
 ![Screenshot 2024-11-27 042612](https://github.com/user-attachments/assets/eef7263c-2dbd-497a-b0ef-8c4e3814b799)
 ![Screenshot 2024-11-27 042555](https://github.com/user-attachments/assets/3d802d8f-f9e8-4dcd-9658-e7b32e0f2af7)
+Update part 3: Converting the Car game to space game
