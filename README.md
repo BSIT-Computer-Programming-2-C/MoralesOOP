@@ -9,3 +9,4 @@ Update part 2: adding color changes to menu and the cars
 Update part 3: Converting the Car game to space game
 ![image](https://github.com/user-attachments/assets/a1646dbe-7e84-48e7-8f24-6df20884ac0c)
 update part 4: Fixing error
+update part 5: Finish fixing error
