@@ -13,6 +13,9 @@ using namespace std;
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
+const int MIN_HEIGHT = 2; 
+const int MAX_HEIGHT = SCREEN_HEIGHT - 4 ; 
+
 int enemyY[3];
 int enemyX[3];
 int enemyFlag[3];
@@ -25,8 +28,8 @@ int spaceshipPosX = WIN_WIDTH / 2;
 int spaceshipPosY = 22; 
 int score = 0;
 
-int bulletX = -1, bulletY = -1;  // Bullet position (-1 means no bullet)
-bool bulletActive = false;  // Bullet status (whether it's fired)
+int bulletX = -1, bulletY = -1; 
+bool bulletActive = false;  
 
 void gotoxy(int x, int y){
 	CursorPosition.X = x;
@@ -47,7 +50,7 @@ void setcursor(bool visible, DWORD size) {
 void drawBorder(){
 	SetConsoleTextAttribute(console, FOREGROUND_BLUE);  
 	for(int i=0; i<SCREEN_HEIGHT; i++){
-		for(int j=0; j<15; j++){
+		for(int j=0; j<17; j++){
 			gotoxy(0+j,i); cout<<"±";
 			gotoxy(WIN_WIDTH-j,i); cout<<"±";
 		}
@@ -59,16 +62,16 @@ void drawBorder(){
 }
 
 void genEnemy(int ind){
-	enemyX[ind] = 15 + rand() % (28);
+	enemyX[ind] = 17 + rand() % (30);
 }
 
 void drawEnemy(int ind){
 	SetConsoleTextAttribute(console, FOREGROUND_RED); 
 	if(enemyFlag[ind] == true){
-		gotoxy(enemyX[ind], enemyY[ind]);   cout<<"  @@@  ";  
+		gotoxy(enemyX[ind], enemyY[ind]);     cout<<"  @@@  ";  
 		gotoxy(enemyX[ind], enemyY[ind] + 1); cout<<" @   @ "; 
 		gotoxy(enemyX[ind], enemyY[ind] + 2); cout<<"  @@@  "; 
-		gotoxy(enemyX[ind], enemyY[ind] + 3); cout<<" @   @ ";  
+		gotoxy(enemyX[ind], enemyY[ind] + 3); cout<<" ±   ± ";  
 	} 
 	SetConsoleTextAttribute(console, 7);
 }
@@ -166,11 +169,11 @@ void instructions(){
 }
 
 void updateScore(){
-	if (score <= 10) {
+	if (score <= 100) {
 		SetConsoleTextAttribute(console, FOREGROUND_RED);  
-	} else if (score <= 20){
+	} else if (score <= 200){
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE); 
-	}else if (score <= 30){
+	}else if (score <= 300){
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);
 	}else {
 		SetConsoleTextAttribute(console, FOREGROUND_GREEN);
@@ -221,10 +224,11 @@ void loadingScreen() {
 }
 int bulletSpeed = 3;
 int spaceShipSpeed = 4;
+
  
 void play(){
 	spaceshipPosX = WIN_WIDTH / 2;
-	spaceshipPosY = 22;  // reset spaceship's vertical position
+	spaceshipPosY = 22; 
 	score = 0;
 	enemyFlag[0] = 1;
 	enemyFlag[1] = 0;
@@ -250,31 +254,30 @@ void play(){
 	while(1){
 		
 		eraseSpaceship();
-		// Bullet movement and logic
 		if (bulletActive) {
 			gotoxy(bulletX, bulletY); cout << " ";
-			bulletY-= bulletSpeed;  // move bullet upwards
+			bulletY-= bulletSpeed; 
 			if (bulletY < 0 || bulletCollision()) {
-				bulletActive = false;  // Reset bullet when it goes off screen or hits an enemy
+				bulletActive = false;  
 			}
 			if (bulletActive) {
-				gotoxy(bulletX, bulletY); cout << "|";  // Draw bullet
+				gotoxy(bulletX, bulletY); cout << "|";  
 			}
 		}
 		
 		if (kbhit()) {
     	char key = getch();
-    	if (key == 'a' && spaceshipPosX > 1) {
-        spaceshipPosX -= spaceShipSpeed; // Move left
+    	if (key == 'a' && spaceshipPosX > + 21) {
+        spaceshipPosX -= spaceShipSpeed; 
     	} 
-    	else if (key == 'd' && spaceshipPosX < WIN_WIDTH - 7) {
-        spaceshipPosX += spaceShipSpeed; // Move right
+    	else if (key == 'd' && spaceshipPosX <WIN_WIDTH -23) {
+        spaceshipPosX += spaceShipSpeed; 
     	} 
-    	else if (key == 'w' && spaceshipPosY > 1) {
-        spaceshipPosY -= spaceShipSpeed; // Move up
+    	else if (key == 'w' && spaceshipPosY > MIN_HEIGHT) {
+        spaceshipPosY -= spaceShipSpeed; 
     	} 
-    	else if (key == 's' && spaceshipPosY < SCREEN_HEIGHT - 5) {
-        spaceshipPosY += spaceShipSpeed; // Move down
+    	else if (key == 's' && spaceshipPosY < MAX_HEIGHT) {
+        spaceshipPosY += spaceShipSpeed; 
     	} 
    		else if (key == ' ' && !bulletActive) { 
         bulletX = spaceshipPosX + 2;  
@@ -302,12 +305,14 @@ void play(){
 		eraseEnemy(0);
 		eraseEnemy(1); 
 		
-		if(enemyY[0] == 9)
-			if(enemyFlag[1] == 0)
-				enemyFlag[1] = 1;
-		
-		if(enemyFlag[0] == 1)
-			enemyY[0] += 1;
+		if (enemyFlag[0] == 1) {
+            enemyY[0] += 1;
+        }
+     
+        if (enemyFlag[0] == 1 && enemyY[0] > 10 && enemyFlag[1] == 0) {
+            enemyFlag[1] = 1;  
+            genEnemy(1);  
+        }
 		
 		if(enemyFlag[1] == 1)
 			enemyY[1] += 1;
@@ -327,7 +332,6 @@ int main(){
 	setcursor(0, 0); 
 	srand((unsigned)time(NULL)); 
 	
-	// Show the loading screen before the menu
 	loadingScreen();
 	
 	do{
