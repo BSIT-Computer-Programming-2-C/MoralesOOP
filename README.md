@@ -8,3 +8,4 @@ Update part 2: adding color changes to menu and the cars
 ![Screenshot 2024-11-27 042555](https://github.com/user-attachments/assets/3d802d8f-f9e8-4dcd-9658-e7b32e0f2af7)
 Update part 3: Converting the Car game to space game
 ![image](https://github.com/user-attachments/assets/a1646dbe-7e84-48e7-8f24-6df20884ac0c)
+update part 4: Fixing error
