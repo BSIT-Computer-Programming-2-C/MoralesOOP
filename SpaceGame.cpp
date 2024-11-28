@@ -48,13 +48,13 @@ void drawBorder(){
 	SetConsoleTextAttribute(console, FOREGROUND_BLUE);  
 	for(int i=0; i<SCREEN_HEIGHT; i++){
 		for(int j=0; j<15; j++){
-			gotoxy(0+j,i); cout<<"±";
-			gotoxy(WIN_WIDTH-j,i); cout<<"±";
+			gotoxy(0+j,i); cout<<"Â±";
+			gotoxy(WIN_WIDTH-j,i); cout<<"Â±";
 		}
 		
 	} 
 	for(int i=0; i<SCREEN_HEIGHT; i++){
-		gotoxy(SCREEN_WIDTH,i); cout<<"±";
+		gotoxy(SCREEN_WIDTH,i); cout<<"Â±";
 	} 
 }
 
@@ -92,7 +92,8 @@ void drawSpaceship(){
     SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_RED); 
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 5; j++){
-            gotoxy(j + spaceshipPosX, i + spaceshipPosY); cout << spaceship[i][j];
+            gotoxy(j + spaceshipPosX, i + spaceshipPosY); cout << 
+			spaceship[i][j];
         }
     }
      SetConsoleTextAttribute(console, 7);
@@ -115,14 +116,13 @@ int collision(){
 	return 0;
 }
 
-// Collision detection for bullet
 bool bulletCollision(){
 	if(bulletY >= enemyY[0] && bulletY <= enemyY[0] + 3) {
 		if(bulletX >= enemyX[0] && bulletX <= enemyX[0] + 6) {
 			resetEnemy(0);
 			score += 1;
 		 if(score >= 1 && score % 10 == 0) {
-                score *= 2;  // Double the score if it's a multiple of 10
+                score *= 2; 
             }
             return true;
     	}
@@ -130,8 +130,9 @@ bool bulletCollision(){
 	if(bulletY >= enemyY[1] && bulletY <= enemyY[1] + 3) {
 		if(bulletX >= enemyX[1] && bulletX <= enemyX[1] + 6) {
 			resetEnemy(1);
+			score += 1;
 		if(score >= 1 && score % 10 == 0) {
-                score *= 2;  // Double the score if it's a multiple of 10
+                score *= 2;  
             }
             return true;
 		}
@@ -142,9 +143,9 @@ bool bulletCollision(){
 void gameover(){
 	system("cls");
 	cout<<endl;
-	cout<<"\t\t±±±±±±±±±±±±±±±±±±±±±±±±±±"<<endl;
-	cout<<"\t\t±±±±±±±± Game Over ±±±±±±±"<<endl;
-	cout<<"\t\t±±±±±±±±±±±±±±±±±±±±±±±±±±"<<endl<<endl;
+	cout<<"\t\tÂ±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±"<<endl;
+	cout<<"\t\tÂ±Â±Â±Â±Â±Â±Â±Â± Game Over Â±Â±Â±Â±Â±Â±Â±"<<endl;
+	cout<<"\t\tÂ±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±"<<endl<<endl;
 	cout<<"\t\tPress any key to go back to menu.";
 	getch();
 }
@@ -207,7 +208,7 @@ void loadingScreen() {
      
         setColor(progress);       
         gotoxy(barStartX + i, barStartY + 2);
-        cout << "±"; 
+        cout << "Â±"; 
         gotoxy(10, 5);
         SetConsoleTextAttribute(console, 7); 
         cout << "Loading: " << progress << "%" << flush;
@@ -218,9 +219,11 @@ void loadingScreen() {
     SetConsoleTextAttribute(console, 7);
     Sleep(500); 
 }
-
+int bulletSpeed = 3;
+int spaceShipSpeed = 4;
+ 
 void play(){
-	spaceshipPosX = -1 + WIN_WIDTH / 2;
+	spaceshipPosX = WIN_WIDTH / 2;
 	spaceshipPosY = 22;  // reset spaceship's vertical position
 	score = 0;
 	enemyFlag[0] = 1;
@@ -242,17 +245,15 @@ void play(){
 	gotoxy(WIN_WIDTH + 2, 15); cout << " D Key - Right"; 
 	gotoxy(WIN_WIDTH + 2, 16); cout << " W Key - Up";  
 	gotoxy(WIN_WIDTH + 2, 17); cout << " S Key - Down"; 
+	gotoxy(WIN_WIDTH + 1, 18); cout << " Space Key - Shoot"; 
 	
 	while(1){
-		drawSpaceship();
-		drawEnemy(0);
-		drawEnemy(1);
-		updateScore();
 		
+		eraseSpaceship();
 		// Bullet movement and logic
 		if (bulletActive) {
 			gotoxy(bulletX, bulletY); cout << " ";
-			bulletY--;  // move bullet upwards
+			bulletY-= bulletSpeed;  // move bullet upwards
 			if (bulletY < 0 || bulletCollision()) {
 				bulletActive = false;  // Reset bullet when it goes off screen or hits an enemy
 			}
@@ -261,34 +262,47 @@ void play(){
 			}
 		}
 		
-		if(kbhit()){
-			char key = getch();
-			if(key == 'a' && spaceshipPosX > 1) spaceshipPosX--; 
-			else if(key == 'd' && spaceshipPosX < WIN_WIDTH - 5) spaceshipPosX++; 
-			else if(key == 'w' && spaceshipPosY > 1) spaceshipPosY--; 
-			else if(key == 's' && spaceshipPosY < SCREEN_HEIGHT - 5) spaceshipPosY++; 
-			else if(key == ' ' && !bulletActive){ 
-				bulletX = spaceshipPosX + 2;  // bullet's x pos aligned with spaceship
-				bulletY = spaceshipPosY;      // bullet starts from spaceship's position
-				bulletActive = true;          // activate the bullet
-			} 
-			else if(key == 27){  
-				gameover(); 
-				return;
-			} 
-		}
+		if (kbhit()) {
+    	char key = getch();
+    	if (key == 'a' && spaceshipPosX > 1) {
+        spaceshipPosX -= spaceShipSpeed; // Move left
+    	} 
+    	else if (key == 'd' && spaceshipPosX < WIN_WIDTH - 7) {
+        spaceshipPosX += spaceShipSpeed; // Move right
+    	} 
+    	else if (key == 'w' && spaceshipPosY > 1) {
+        spaceshipPosY -= spaceShipSpeed; // Move up
+    	} 
+    	else if (key == 's' && spaceshipPosY < SCREEN_HEIGHT - 5) {
+        spaceshipPosY += spaceShipSpeed; // Move down
+    	} 
+   		else if (key == ' ' && !bulletActive) { 
+        bulletX = spaceshipPosX + 2;  
+        bulletY = spaceshipPosY;      
+        bulletActive = true;          
+    	} 
+    	else if (key == 27) {  
+        	gameover(); 
+        	return;
+    	} 
+	}
+		drawSpaceship();	
+        drawEnemy(0);
+        drawEnemy(1);
+        updateScore();	
 
 		if(collision() == 1){
 			gameover();
 			return;
 		}
 
-		Sleep(50);
+		Sleep(85);
 		eraseSpaceship();
+		drawSpaceship();
 		eraseEnemy(0);
 		eraseEnemy(1); 
 		
-		if(enemyY[0] == 10)
+		if(enemyY[0] == 9)
 			if(enemyFlag[1] == 0)
 				enemyFlag[1] = 1;
 		
@@ -298,11 +312,11 @@ void play(){
 		if(enemyFlag[1] == 1)
 			enemyY[1] += 1;
 		 
-		if(enemyY[0] > SCREEN_HEIGHT - 3){
+		if(enemyY[0] > SCREEN_HEIGHT - 4){
 			resetEnemy(0);
 				
 		}
-		if(enemyY[1] > SCREEN_HEIGHT - 3){
+		if(enemyY[1] > SCREEN_HEIGHT - 4){
 			resetEnemy(1);
 				
 		}
@@ -319,9 +333,9 @@ int main(){
 	do{
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE); 
 		system("cls");
-		gotoxy(10,5); cout << " ±±±±±±±±±±±±±±±±±±±±±±±±±± "; 
+		gotoxy(10,5); cout << " Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â± "; 
 		gotoxy(10,6); cout << " |       Space Game       | "; 
-		gotoxy(10,7); cout << " ±±±±±±±±±±±±±±±±±±±±±±±±±±";
+		gotoxy(10,7); cout << " Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±Â±";
 		gotoxy(11,9); cout << "1. Start Game";
 		gotoxy(11,10); cout << "2. Instructions";	 
 		gotoxy(11,11); cout << "3. Quit";
@@ -337,4 +351,3 @@ int main(){
 	
 	return 0;
 }
-
