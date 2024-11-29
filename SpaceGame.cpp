@@ -146,13 +146,16 @@ bool bulletCollision(){
 void gameover(){
 	system("cls");
 	cout<<endl;
+	SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY);  
 	cout<<"\t\t±±±±±±±±±±±±±±±±±±±±±±±±±±"<<endl;
 	cout<<"\t\t±±±±±±±± Game Over ±±±±±±±"<<endl;
 	cout<<"\t\t±±±±±±±±±±±±±±±±±±±±±±±±±±"<<endl<<endl;
 	cout<<"\t\tPress any key to go back to menu.";
 	getch();
+	
 }
 void instructions(){
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
 	system("cls");
 	cout << "Instructions";
 	cout << "\n----------------";
@@ -240,7 +243,8 @@ void play(){
 	genEnemy(0);
 	genEnemy(1);
 	
-	gotoxy(WIN_WIDTH + 7, 2); cout << "Space Game";
+	SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	gotoxy(WIN_WIDTH + 6, 2); cout << "Space Game";
 	gotoxy(WIN_WIDTH + 6, 4); cout << "----------";
 	gotoxy(WIN_WIDTH + 6, 6); cout << "----------";
 	gotoxy(WIN_WIDTH + 7, 12); cout << "Control ";
@@ -336,17 +340,22 @@ int main(){
 	
 	do{
 		SetConsoleTextAttribute(console, FOREGROUND_BLUE); 
+			
 		system("cls");
 		gotoxy(10,5); cout << " ±±±±±±±±±±±±±±±±±±±±±±±±±± "; 
 		gotoxy(10,6); cout << " |       Space Game       | "; 
 		gotoxy(10,7); cout << " ±±±±±±±±±±±±±±±±±±±±±±±±±±";
+		SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 		gotoxy(11,9); cout << "1. Start Game";
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
 		gotoxy(11,10); cout << "2. Instructions";	 
+		SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_GREEN);
 		gotoxy(11,11); cout << "3. Quit";
 		gotoxy(11,13); cout << "Select option: ";
 		char op = getche();
 		
 		 SetConsoleTextAttribute(console, 7);
+		
 		
 		if(op == '1') play();
 		else if(op == '2') instructions();
