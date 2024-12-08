@@ -1,4 +1,5 @@
 Step to run the code Download Dev c++ compiler
+Not actually oop more like a data structure
 https://sourceforge.net/projects/orwelldevcpp/files/Setup%20Releases/Dev-Cpp%205.11%20TDM-GCC%204.9.2%20Setup.exe/download
 
 Update part 1: adding Loading screen
